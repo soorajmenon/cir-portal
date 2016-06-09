@@ -54,7 +54,7 @@ def anonymous_required(func):
 class UserRegistrationView(AnonymousRequiredMixin, FormView):
     template_name = "register/user/register_user.html"
     authenticated_redirect_url = reverse_lazy(u"home")
-    form_class = student_fields
+    form_class = UserRegistrationForm
     success_url = '/register/user/success/'
 
     def form_valid(self, form):
@@ -75,6 +75,7 @@ class StudentBulkUploadView( LoginRequiredMixin, FormView):
     template_name = "register/cirstaff/register_bulk_student.html"
     form_class = UploadFileForm
     success_url = '/register/student/success/'
+
 
 
 def handle_student_upload(request):
@@ -116,3 +117,14 @@ class StudentListUpdateView(UpdateView):
             return obj
         else:
             raise Http404("That doesnt exist.")
+
+class StudentFilterExternalView(ListView):
+    template_name= 'register/cirstaff/filter_external_list.html'
+
+    def get_queryset(self):
+        cgpa = self.request.GET.get('cgpa')
+        arrears = self.request.GET.get('arrear')
+        branch = self.request.GET.get('branch')
+        tenth = self.request.GET.get('tenth')
+        twelth = self.request.GET.get('twelth')
+        return Student.Objects.filter(cgpa__gte=cgpa, curr_arrears__gte=arrears, branch=branch, tenth_mark__gte=tenth, twelth_mark__gte=twelth)

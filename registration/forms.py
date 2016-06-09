@@ -69,8 +69,6 @@ student_fields = ['name','curr_course','branch','tenth_mark','twelth_mark',
 class StudentRegistrationForm(ModelForm):
     class Meta:
         model = Student
-
-        fields = student_fields
         fields = ['aums_id'] + student_fields
 
 
